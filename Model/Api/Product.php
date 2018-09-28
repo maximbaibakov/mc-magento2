@@ -496,7 +496,10 @@ class Product
                 $product->getId(),
                 \Ebizmarts\MailChimp\Helper\Data::IS_PRODUCT
             );
-            if ($product->getId()!=$item->getProductId() || $product->getTypeId()=='bundle' || $product->getTypeId()=='grouped') {
+            if ($product->getId()!=$item->getProductId() || (
+                $product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE &&
+                $product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL &&
+                $product->getTypeId() != "downloadable")) {
                 continue;
             }
             if ($productSyncData->getMailchimpSyncModified() &&
@@ -528,8 +531,10 @@ class Product
                 $product->getId(),
                 \Ebizmarts\MailChimp\Helper\Data::IS_PRODUCT
             );
-
-            if ($product->getId()!=$item->getProductId() || $product->getTypeId()=='bundle' || $product->getTypeId()=='grouped') {
+            if ($product->getId()!=$item->getProductId() || (
+                $product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE &&
+                $product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL &&
+                $product->getTypeId() != "downloadable")) {
                 continue;
             }
 
