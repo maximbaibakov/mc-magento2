@@ -218,7 +218,7 @@ class Cart
              * @var $customer \Magento\Customer\Model\Customer
              */
             $customer = $this->_customerFactory->create();
-            $customer->setWebsiteId($this->_helper->getWebsiteId($magentoStoreId));
+            $customer->setWebsiteId($magentoStoreId);
             $customer->loadByEmail($cart->getCustomerEmail());
 
             if ($customer->getEmail() != $cart->getCustomerEmail()) {
@@ -264,7 +264,6 @@ class Cart
             if (count($cart->getAllVisibleItems())) {
                 $cartJson = $this->_makeCart($cart, $mailchimpStoreId, $magentoStoreId);
                 if ($cartJson!="") {
-                    $this->_helper->modifyCounter(\Ebizmarts\MailChimp\Helper\Data::QUO_MOD);
                     $allCarts[$this->_counter]['method'] = 'POST';
                     $allCarts[$this->_counter]['path'] = '/ecommerce/stores/' . $mailchimpStoreId . '/carts';
                     $allCarts[$this->_counter]['operation_id'] = $this->_batchId . '_' . $cartId;
@@ -305,8 +304,6 @@ class Cart
         );
         // be sure that the quotes are already in mailchimp and not deleted
         $newCarts->getSelect()->where("m4m.mailchimp_sync_delta IS NULL");
-
-
         // limit the collection
         $newCarts->getSelect()->limit(self::BATCH_LIMIT);
         /**
@@ -324,7 +321,7 @@ class Cart
                 continue;
             }
             $customer = $this->_customerFactory->create();
-            $customer->setWebsiteId($this->_helper->getWebsiteId($magentoStoreId));
+            $customer->setWebsiteId($magentoStoreId);
             $customer->loadByEmail($cart->getCustomerEmail());
 
             if ($customer->getEmail() != $cart->getCustomerEmail()) {
@@ -365,7 +362,6 @@ class Cart
 
             $cartJson = $this->_makeCart($cart, $mailchimpStoreId, $magentoStoreId);
             if ($cartJson!="") {
-                $this->_helper->modifyCounter(\Ebizmarts\MailChimp\Helper\Data::QUO_NEW);
                 $allCarts[$this->_counter]['method'] = 'POST';
                 $allCarts[$this->_counter]['path'] = '/ecommerce/stores/' . $mailchimpStoreId . '/carts';
                 $allCarts[$this->_counter]['operation_id'] = $this->_batchId . '_' . $cartId;

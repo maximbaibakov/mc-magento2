@@ -106,11 +106,6 @@ class Customer
                 $this->_helper->log('Customer: '.$customer->getId().' json encode failed');
             }
             if (!empty($customerJson)) {
-                if($item->getMailchimpSyncModified() == 1) {
-                    $this->_helper->modifyCounter(\Ebizmarts\MailChimp\Helper\Data::CUS_MOD);
-                } else {
-                    $this->_helper->modifyCounter(\Ebizmarts\MailChimp\Helper\Data::CUS_NEW);
-                }
                 $customerArray[$counter]['method'] = "PUT";
                 $customerArray[$counter]['path'] = "/ecommerce/stores/" . $mailchimpStoreId . "/customers/" . $customer->getId();
                 $customerArray[$counter]['operation_id'] = $this->_batchId . '_' . $customer->getId();
