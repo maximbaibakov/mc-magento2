@@ -178,6 +178,7 @@ class Order
 
                 $orderJson = $this->GeneratePOSTPayload($order, $mailchimpStoreId, $magentoStoreId, true);
                 if (!empty($orderJson)) {
+                    $this->_helper->modifyCounter(\Ebizmarts\MailChimp\Helper\Data::ORD_MOD);
                     $batchArray[$this->_counter]['method'] = "PATCH";
                     $batchArray[$this->_counter]['path'] = '/ecommerce/stores/' . $mailchimpStoreId . '/orders/' . $order->getIncrementId();
                     $batchArray[$this->_counter]['operation_id'] = $this->_batchId . '_' . $orderId;
@@ -245,6 +246,7 @@ class Order
                 }
                 $orderJson = $this->GeneratePOSTPayload($order, $mailchimpStoreId, $magentoStoreId);
                 if (!empty($orderJson)) {
+                    $this->_helper->modifyCounter(\Ebizmarts\MailChimp\Helper\Data::ORD_NEW);
                     $batchArray[$this->_counter]['method'] = "POST";
                     $batchArray[$this->_counter]['path'] = '/ecommerce/stores/' . $mailchimpStoreId . '/orders';
                     $batchArray[$this->_counter]['operation_id'] = $this->_batchId . '_' . $orderId;
@@ -524,12 +526,12 @@ class Order
         //customer orders data
         $orderCollection = $this->_orderCollectionFactory->create();
         $orderCollection->addFieldToFilter('state', [
-            ['neq',\Magento\Sales\Model\Order::STATE_CANCELED],
-            ['neq',\Magento\Sales\Model\Order::STATE_CLOSED]])
+            ['neq' => \Magento\Sales\Model\Order::STATE_CANCELED],
+            ['neq' => \Magento\Sales\Model\Order::STATE_CLOSED]])
             ->addAttributeToFilter('customer_email', ['eq' => $order->getCustomerEmail()]);
 
-        $totalOrders = 1;
-        $totalAmountSpent = (int)$order->getGrandTotal();
+        $totalOrders = 0;
+        $totalAmountSpent = 0;
         /**
          * @var $customerOrder \Magento\Sales\Model\Order
          */
